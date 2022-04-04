@@ -1,0 +1,109 @@
+/*code written by LAMBODAR 
+If Ultrasoic sensor measure distance from 
+100 to 200 cm  the  only Second motor will be start
+
+If Ultrasoic sensor measure distance from 
+200 to 300 cm  the only third  motor will be start.
+
+If PIR SENSOR detection any motion current working will stop.
+************************************************************
+*/
+
+int triggerpin = 8; // trigpin conncted to 8 pin of arduino
+int echopin  = 9;  //echo pin connected to 9 pin of arduino
+int relay1 = 2;  // FIRST MOTOR/relay 1 conncetd to 2 pin of arduino
+int relay2 = 3;  //SECOND MOTOR/relay 2 connected to 2 pin  of arduino
+int relay3 = 4;  //THIRD MOTOR/relay 3 connected to 2 pin of arduino
+
+int pir =7; //PIR sensor conncted to 7 pin og arduino
+int duration; /*distance and duration is two variable assigned
+               for ultrasonic sensor */
+int distance ;
+int pirval;
+void setup()
+{
+  pinMode(triggerpin, OUTPUT);
+  pinMode(echopin, INPUT);
+  pinMode(pir, INPUT);
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  pinMode(relay3, OUTPUT);
+  Serial.begin(9600);
+}
+void loop()
+{
+  digitalWrite( triggerpin, LOW);
+  delayMicroseconds(2);
+  digitalWrite( triggerpin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite( triggerpin, LOW);
+  duration=pulseIn(echopin,HIGH);
+  distance= (duration*0.0343)/2;
+  Serial.println("\ndistance =  ");
+  Serial.println( distance );
+  pirval =digitalRead(pir);
+  Serial.println("pir val = ");
+  Serial.println(pirval);
+  
+  
+  //STUFF for motor1
+  
+  if (distance < 100 )
+  {
+    Serial.println("distance is less than 100");
+    Serial.println("Motor1 started ");
+digitalWrite(relay1 , HIGH);
+  if(pirval>0){
+  digitalWrite(relay1, 0);
+   Serial.println("Motion Detected!! ");
+   Serial.println("All Motors are Stopped ");
+    }
+  delay(1000);
+  }
+  
+  else {
+  digitalWrite(relay1 ,LOW);}
+  
+  //STUFF For motor2
+   
+   if (distance >= 100 and distance <200)
+  {
+    Serial.println("distance is between 100 to 200");
+    Serial.println("Motor2 started ");
+     
+  digitalWrite(relay2, HIGH);
+  if(pirval>0){
+   Serial.println("Motion Detected!! ");
+   Serial.println("All Motors are Stopped ");
+    digitalWrite(relay2, 0);
+  }
+  delay(1000);
+  }
+  else {
+  digitalWrite(relay2, LOW);
+  }
+  
+  //STUFF for  motor3
+  
+  if (distance >= 200 and distance <300)
+  {
+    Serial.println("distance is between 200 to 300");
+    Serial.println("Motor3 started ");
+    delay(100);
+    
+  digitalWrite(relay3, HIGH);
+  if(pirval>0){
+    
+   Serial.println("\nMotion Detected!! ");
+   Serial.println("All Motors are Stopped ");
+  digitalWrite(relay3, 0);
+  }
+  delay(1000);
+  }
+  else {
+  digitalWrite(relay3, LOW);
+  }
+  
+   
+   
+}
